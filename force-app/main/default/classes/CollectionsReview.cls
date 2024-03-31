@@ -111,5 +111,3 @@ public with sharing class CollectionsReview {
 	}
 		
 }
-																								
-																								
