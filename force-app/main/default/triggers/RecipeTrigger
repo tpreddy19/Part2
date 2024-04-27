@@ -1,1 +1,10 @@
+trigger RecipeTrigger on Recipe__c (before insert, before update, after insert, after update) {
+    if (Trigger.Isinsert ||trigger.Isupdate){
+        RecipeClass.recipeValidator(trigger.new);
+    }
+    //SF will have modified values in Trigger.New
+    if(Trigger.IsBefore)
+    {RecipeClass.recipeValidator(trigger.new);}
+}
+
 
