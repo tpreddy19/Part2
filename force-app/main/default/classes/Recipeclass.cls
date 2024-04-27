@@ -1,4 +1,4 @@
-//Create a method that will be called before a recipe is inserted or updated to check if it is missing key values. 
+//Create a method that will be called before a recipe is inserted or updated  to check if it is missing key values. 
 //If it is missing one or more of the following, check the Draft__c field on the recipe:
 public class RecipeClass {
     public static void recipeValidator(List<Recipe__c> testRecipes){
