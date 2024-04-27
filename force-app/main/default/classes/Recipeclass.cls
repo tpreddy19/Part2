@@ -1,3 +1,12 @@
+trigger RecipeTrigger on Recipe__c (before insert, before update, after insert, after update) {
+    if (Trigger.Isinsert ||trigger.Isupdate){
+        RecipeClass.recipeValidator(trigger.new);
+    }
+    //SF will have modified values in Trigger.New
+    if(Trigger.IsBefore)
+    {RecipeClass.recipeValidator(trigger.new);}
+}
+
 //Create a method that will be called before a recipe is inserted or updated  to check if it is missing key values. 
 //If it is missing one or more of the following, check the Draft__c field on the recipe:
 public class RecipeClass {
