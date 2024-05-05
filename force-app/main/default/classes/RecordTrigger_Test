@@ -1,0 +1,71 @@
+/**
+ * This class contains unit tests for validating the behavior of Apex classes
+ * and triggers.
+ *
+ * Unit tests are class methods that verify whether a particular piece
+ * of code is working properly. Unit test methods take no arguments,
+ * commit no data to the database, and are flagged with the testMethod
+ * keyword in the method definition.
+ *
+ * All test methods in an org are executed whenever Apex code is deployed
+ * to a production org to confirm correctness, ensure code
+ * coverage, and prevent regressions. All Apex classes are
+ * required to have at least 75% code coverage in order to be deployed
+ * to a production org. In addition, all triggers must have some code coverage.
+ * 
+ * The @isTest class annotation indicates this class only contains test
+ * methods. Classes defined with the @isTest annotation do not count against
+ * the org size limit for all Apex scripts.
+ *
+ * See the Apex Language Reference for more information about Testing and Code Coverage.
+ */
+@isTest
+private class RecipeTrigger_Test {
+
+    @isTest
+    static void  validateRecipeDraft() {
+       
+        Recipe__c myRecipe = new Recipe__c(Name='Rice the Cloud', Active_Time__c=30,Active_Time_Units__c='minutes',Description__c ='This is a Rice recipe');
+        System.debug('recipe: ' + myRecipe);
+        Test.startTest();
+            insert myRecipe;
+        Test.stopTest();
+
+        List<Recipe__c> recipeValidate = [Select  Draft__c from Recipe__c where Id = :myRecipe.Id];
+        System.assertEquals(true, recipeValidate[0].Draft__c);
+    }
+
+    @isTest
+    static void checkRecipeComplexity(){
+            // Create test data
+            Recipe__c recipe1 = new Recipe__c(Name='Rice cooking', Active_Time__c=61,Active_Time_Units__c='minutes',
+                                              Description__c ='This is a Rice recipe');
+            
+            Test.startTest();
+                insert recipe1;
+            Test.stopTest();
+            List<Recipe__c>  recipeComplexity = [Select Complexity__c from Recipe__c where Id = :recipe1.Id];
+            System.assertEquals('Difficult', recipeComplexity[0].Complexity__c);
+                      
+    }
+    @isTest
+    static void checkRecipeTask(){
+            // Create test data
+            Recipe__c recipe1 = new Recipe__c(Name='Rice cooking', Active_Time__c=61,Active_Time_Units__c='minutes',
+                                              Description__c ='This is a Rice recipe', Servings__c=5);
+            Cookbook__c recipcBook = new Cookbook__c(Name='US Cookbook');
+            
+            Test.startTest();
+                insert recipe1;
+                insert recipcBook;
+            Test.stopTest();
+
+            Recipe_Usage__c recipeUsage = new Recipe_Usage__c(Cookbook__c=recipcBook.Id, Recipe__c = recipe1.Id);
+        	system.debug('Recipe usage ' + recipeUsage);
+            insert recipeUsage;
+
+            List<Task>  tsk = [Select Id from Task where WhatId = :recipeUsage.Id];
+            System.assertEquals(1, tsk.size());
+                      
+    }
+}
