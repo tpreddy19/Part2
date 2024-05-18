@@ -19,6 +19,9 @@
  *
  * See the Apex Language Reference for more information about Testing and Code Coverage.
  */
+
+Write a test method that verifies an exception is thrown when a recipe is missing a required field.  (hint:  you have to try first, catch the exception, then assert that the error was as expected.)
+
 @isTest
 private class RecipeTrigger_Test {
 
