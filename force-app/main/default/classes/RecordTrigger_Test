@@ -37,6 +37,9 @@ private class RecipeTrigger_Test {
 
     @isTest
     static void checkRecipeComplexity(){
+        
+        try 
+        {
             // Create test data
             Recipe__c recipe1 = new Recipe__c(Name='Rice cooking', Active_Time__c=61,Active_Time_Units__c='minutes',
                                               Description__c ='This is a Rice recipe');
@@ -46,6 +49,18 @@ private class RecipeTrigger_Test {
             Test.stopTest();
             List<Recipe__c>  recipeComplexity = [Select Complexity__c from Recipe__c where Id = :recipe1.Id];
             System.assertEquals('Difficult', recipeComplexity[0].Complexity__c);
+             // Create test data
+            Recipe__c recipe2 = new Recipe__c(Name='Rice cooking1',Active_Time_Units__c='minutes',
+                                              Description__c ='This is a Rice recipe');
+            
+            Test.startTest();
+                insert recipe2;
+            Test.stopTest();
+        }
+        catch(Exception e) {
+            System.assertEquals('There is already an ingredient with that name for this recipe!', 
+                                e.getMessage());
+        }
                       
     }
     @isTest
